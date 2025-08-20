@@ -1,11 +1,16 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Image from 'next/image'
 
 export default function Products() {
   const [currentSlide, setCurrentSlide] = useState(0)
   const [imagesLoaded, setImagesLoaded] = useState(false)
+  
+  // Touch/swipe states
+  const [touchStart, setTouchStart] = useState<number | null>(null)
+  const [touchEnd, setTouchEnd] = useState<number | null>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
 
   const slides = [
     {
@@ -85,6 +90,33 @@ export default function Products() {
     setCurrentSlide(index)
   }
 
+  // Swipe detection logic
+  const minSwipeDistance = 50
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null) // Reset touchEnd to avoid false swipe
+    setTouchStart(e.targetTouches[0].clientX)
+  }
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX)
+  }
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return
+    
+    const distance = touchStart - touchEnd
+    const isLeftSwipe = distance > minSwipeDistance
+    const isRightSwipe = distance < -minSwipeDistance
+
+    if (isLeftSwipe && currentSlide < slides.length - 1 && imagesLoaded) {
+      nextSlide()
+    }
+    if (isRightSwipe && currentSlide > 0 && imagesLoaded) {
+      prevSlide()
+    }
+  }
+
   const currentSlideData = slides[currentSlide]
 
   return (
@@ -161,7 +193,13 @@ export default function Products() {
           </button>
 
           {/* Content Container - Between Arrows - Reduced Padding on Mobile */}
-          <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-20 px-4 lg:px-20">
+          <div 
+            ref={containerRef}
+            className="flex flex-col lg:flex-row items-center gap-8 lg:gap-20 px-4 lg:px-20"
+            onTouchStart={onTouchStart}
+            onTouchMove={onTouchMove}
+            onTouchEnd={onTouchEnd}
+          >
             {/* Left Content Area */}
             <div className="w-full lg:w-5/12">
               {/* Dynamic Content based on current slide */}
