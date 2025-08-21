@@ -6,17 +6,22 @@ import Image from 'next/image';
 export default function Hero() {
   return (
     <div className="relative">
-      {/* Image Container */}
+      {/* Video Container */}
       <div className="absolute inset-0">
-        <Image
-          src="/hero-banner.webp"
-          alt="Hero Banner"
-          fill
-          className="object-cover"
-          priority
-        />
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          poster="/hero-banner.webp"
+          className="w-full h-full object-cover"
+        >
+          <source src="/hero-banner-video.mp4" type="video/mp4" />
+          {/* Fallback for browsers that don't support video */}
+          Your browser does not support the video tag.
+        </video>
         {/* Overlay for better text readability */}
-        <div className="absolute inset-0 bg-black/30"></div>
+        <div className="absolute inset-0 bg-black/50"></div>
       </div>
 
       {/* Content Container - Left Side */}
