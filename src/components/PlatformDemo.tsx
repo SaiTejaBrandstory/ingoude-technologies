@@ -1,5 +1,3 @@
-import Image from 'next/image';
-
 export default function PlatformDemo() {
   return (
     <section 
@@ -43,14 +41,17 @@ export default function PlatformDemo() {
 
         {/* Platform Demo Content */}
         <div className="text-center">
-          <Image
-            src="/platform.webp"
-            alt="Platform Demo"
-            width={800}
-            height={600}
-            className="w-full max-w-5xl mx-auto rounded-lg shadow-2xl"
-            priority
-          />
+          <div className="w-full max-w-5xl mx-auto rounded-lg shadow-2xl overflow-hidden">
+            <iframe
+              src="https://www.youtube.com/embed/uTbDkVLb13I"
+              className="w-full h-full"
+              style={{ aspectRatio: '16/9' }}
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
+              title="Platform Demo"
+            ></iframe>
+          </div>
         </div>
       </div>
     </section>
